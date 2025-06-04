@@ -1,38 +1,62 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 
 function Register({ open, onClose }) {
     const [ formData, setFormData ] = useState({
-        username: '',
+        name: '',
         email: '',
         password: '',
         retypePassword: '',
         role: '',
-        country: '',
-        state: '',
-        city: '',
+        address: {
+            city: '',
+            state: '',
+            country: ''
+        }
     });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [ name ]: value }));
+
+        if ([ 'city', 'state', 'country' ].includes(name)) {
+            setFormData((prev) => ({
+                ...prev,
+                address: {
+                    ...prev.address,
+                    [ name ]: value,
+                },
+            }));
+        } else {
+            setFormData((prev) => ({ ...prev, [ name ]: value }));
+        }
     };
 
-    const handleSubmit = (e) => {
+
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (formData.password !== formData.retypePassword) {
             alert("Passwords don't match!");
             return;
         }
-        console.log('Submitted Data:', formData);
+
+        try {
+            const response = await axios.post('http://localhost:4041/UserManagemnt-api/register ', formData);
+            alert('Product added:', response.data);
+        } catch (error) {
+            alert('Error posting product:', error);
+        }
         setFormData({
-            username: '',
+            name: '',
             email: '',
             password: '',
             retypePassword: '',
             role: '',
-            country: '',
-            state: '',
-            city: '',
+            address: {
+                city: '',
+                state: '',
+                country: ''
+            }
         })
         onClose();
     };
@@ -58,15 +82,15 @@ function Register({ open, onClose }) {
                     <form onSubmit={ handleSubmit } className="p-6">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div>
-                                <label className="block mb-1 font-medium" htmlFor="username">
+                                <label className="block mb-1 font-medium" htmlFor="name">
                                     User Name
                                 </label>
                                 <input
-                                    id="username"
-                                    name="username"
+                                    id="name"
+                                    name="name"
                                     required
                                     type="text"
-                                    value={ formData.username }
+                                    value={ formData.name }
                                     onChange={ handleChange }
                                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
@@ -146,7 +170,7 @@ function Register({ open, onClose }) {
                                     name="country"
                                     required
                                     type="text"
-                                    value={ formData.country }
+                                    value={ formData.address.country }
                                     onChange={ handleChange }
                                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
@@ -161,7 +185,7 @@ function Register({ open, onClose }) {
                                     name="state"
                                     required
                                     type="text"
-                                    value={ formData.state }
+                                    value={ formData.address.state }
                                     onChange={ handleChange }
                                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
@@ -176,7 +200,7 @@ function Register({ open, onClose }) {
                                     name="city"
                                     required
                                     type="text"
-                                    value={ formData.city }
+                                    value={ formData.address.city }
                                     onChange={ handleChange }
                                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />

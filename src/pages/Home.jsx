@@ -7,7 +7,7 @@ function Home() {
     useEffect(() => {
         axios.get('http://localhost:4041/UserManagemnt-api/allUser')
             .then(response => {
-                console.log(response.data);  // ✅ Should be an array, not a string
+                console.log(response.data);  
                 setUsers(response.data);
             })
             .catch(error => {
