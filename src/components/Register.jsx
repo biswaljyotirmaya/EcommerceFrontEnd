@@ -8,11 +8,13 @@ function Register({ open, onClose }) {
         password: '',
         retypePassword: '',
         role: '',
-        address: {
-            city: '',
-            state: '',
-            country: ''
-        }
+        address: [
+            {
+                city: '',
+                state: '',
+                country: ''
+            }
+        ]
     });
 
     const handleChange = (e) => {
@@ -21,17 +23,17 @@ function Register({ open, onClose }) {
         if ([ 'city', 'state', 'country' ].includes(name)) {
             setFormData((prev) => ({
                 ...prev,
-                address: {
-                    ...prev.address,
-                    [ name ]: value,
-                },
+                address: [
+                    {
+                        ...prev.address[ 0 ],
+                        [ name ]: value
+                    }
+                ]
             }));
         } else {
             setFormData((prev) => ({ ...prev, [ name ]: value }));
         }
     };
-
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -41,23 +43,36 @@ function Register({ open, onClose }) {
         }
 
         try {
-            const response = await axios.post('http://localhost:4041/UserManagemnt-api/register ', formData);
-            alert('Product added:', response.data);
+            const response = await axios.post(
+                'http://localhost:4041/UserManagemnt-api/register',
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            alert('User Registered: ' + response.data);
         } catch (error) {
-            alert('Error posting product:', error);
+            console.error('Register failed (frontend):', error);
+            alert('Registration failed. Please check the data and try again.');
         }
+
         setFormData({
             name: '',
             email: '',
             password: '',
             retypePassword: '',
             role: '',
-            address: {
-                city: '',
-                state: '',
-                country: ''
-            }
-        })
+            address: [
+                {
+                    city: '',
+                    state: '',
+                    country: ''
+                }
+            ]
+        });
+
         onClose();
     };
 
@@ -92,7 +107,7 @@ function Register({ open, onClose }) {
                                     type="text"
                                     value={ formData.name }
                                     onChange={ handleChange }
-                                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full border border-gray-300 rounded-md px-3 py-2"
                                 />
                             </div>
 
@@ -107,7 +122,7 @@ function Register({ open, onClose }) {
                                     type="email"
                                     value={ formData.email }
                                     onChange={ handleChange }
-                                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full border border-gray-300 rounded-md px-3 py-2"
                                 />
                             </div>
 
@@ -122,7 +137,7 @@ function Register({ open, onClose }) {
                                     type="password"
                                     value={ formData.password }
                                     onChange={ handleChange }
-                                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full border border-gray-300 rounded-md px-3 py-2"
                                 />
                             </div>
 
@@ -137,7 +152,7 @@ function Register({ open, onClose }) {
                                     type="password"
                                     value={ formData.retypePassword }
                                     onChange={ handleChange }
-                                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full border border-gray-300 rounded-md px-3 py-2"
                                 />
                             </div>
 
@@ -151,11 +166,9 @@ function Register({ open, onClose }) {
                                     required
                                     value={ formData.role }
                                     onChange={ handleChange }
-                                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full border border-gray-300 rounded-md px-3 py-2"
                                 >
-                                    <option value="" disabled>
-                                        Select Role
-                                    </option>
+                                    <option value="" disabled>Select Role</option>
                                     <option value="ADMIN">Admin</option>
                                     <option value="USER">User</option>
                                 </select>
@@ -170,9 +183,9 @@ function Register({ open, onClose }) {
                                     name="country"
                                     required
                                     type="text"
-                                    value={ formData.address.country }
+                                    value={ formData.address[ 0 ].country }
                                     onChange={ handleChange }
-                                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full border border-gray-300 rounded-md px-3 py-2"
                                 />
                             </div>
 
@@ -185,9 +198,9 @@ function Register({ open, onClose }) {
                                     name="state"
                                     required
                                     type="text"
-                                    value={ formData.address.state }
+                                    value={ formData.address[ 0 ].state }
                                     onChange={ handleChange }
-                                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full border border-gray-300 rounded-md px-3 py-2"
                                 />
                             </div>
 
@@ -200,9 +213,9 @@ function Register({ open, onClose }) {
                                     name="city"
                                     required
                                     type="text"
-                                    value={ formData.address.city }
+                                    value={ formData.address[ 0 ].city }
                                     onChange={ handleChange }
-                                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full border border-gray-300 rounded-md px-3 py-2"
                                 />
                             </div>
                         </div>
