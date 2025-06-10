@@ -44,7 +44,7 @@ function Register({ open, onClose }) {
 
         try {
             const response = await axios.post(
-                'http://localhost:4041/UserManagemnt-api/register',
+                'http://localhost:4041/UserManagement-api/register',
                 formData,
                 {
                     headers: {

@@ -26,12 +26,8 @@ function Login({ show, onClose }) {
         const { email, password } = formData;
 
         axios
-            .get('http://localhost:4041/UserManagemnt-api/login/email', {
-                params: {
-                    email: email,
-                    password: password,
-                },
-            })
+        axios.get(`http://localhost:4041/UserManagement-api/login/${email}/${password}`)
+
             .then((response) => {
                 const user = response.data;
                 console.log('Backend response:', user);
