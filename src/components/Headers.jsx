@@ -3,18 +3,22 @@ import { Link } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../config/authSlice'; 
+
 function Headers() {
-    const [ login, setLogin ] = useState(false);
     const [ showRegister, setShowRegister ] = useState(false);
     const [ showLogin, setShowLogin ] = useState(false);
 
+    const dispatch = useDispatch();
+    const { loggedIn } = useSelector((state) => state.auth);
+
     const handleLogout = () => {
-        setLogin(false);
+        dispatch(logout());
     };
 
     const handleLoginSuccess = () => {
-        setLogin(true);
-        setShowLogin(false);
+        setShowLogin(false); 
     };
 
     return (
@@ -30,7 +34,7 @@ function Headers() {
                 </ul>
 
                 <ul className="flex gap-4">
-                    { !login && (
+                    { !loggedIn && (
                         <>
                             <li>
                                 <button onClick={ () => setShowRegister(true) } className="hover:underline">
@@ -44,7 +48,7 @@ function Headers() {
                             </li>
                         </>
                     ) }
-                    { login && (
+                    { loggedIn && (
                         <li>
                             <button onClick={ handleLogout } className="hover:underline text-red-600">
                                 Logout
@@ -55,8 +59,7 @@ function Headers() {
             </nav>
 
             <Register open={ showRegister } onClose={ () => setShowRegister(false) } />
-            <Login show={ showLogin } onClose={ () => setShowLogin(false) } onSuccess={ () => setLogin(true) } />
-
+            <Login show={ showLogin } onClose={ () => setShowLogin(false) } onSuccess={ handleLoginSuccess } />
         </>
     );
 }
