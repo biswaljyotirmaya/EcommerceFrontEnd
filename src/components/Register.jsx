@@ -25,15 +25,17 @@ function Register({ open, onClose }) {
         }
         console.log('Submitted Data:', formData);
         setFormData({
-            username: '',
-            email: '',
-            password: '',
-            retypePassword: '',
-            role: '',
-            country: '',
-            state: '',
-            city: '',
+            username: formData.username,
+            email: formData.email,
+            password: formData.password,
+            retypePassword: formData.retypePassword,
+            role: formData.role,
+            country: formData.country,
+            state: formData.state,
+            city: formData.city,
         })
+        
+        
         onClose();
     };
 
@@ -193,6 +195,7 @@ function Register({ open, onClose }) {
                             </button>
                             <button
                                 type="submit"
+                                onClick={ onClose }
                                 className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
                             >
                                 Submit
