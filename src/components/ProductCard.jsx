@@ -8,7 +8,7 @@ function ProductCard({ product }) {
         <>
             <div className="bg-white rounded-xl shadow-md p-4 text-center hover:shadow-lg transition">
                 <img
-                    src={ product.image }
+                    src={ product.imageLink } 
                     alt={ product.name }
                     className="w-full h-40 object-cover rounded-md cursor-pointer"
                     onClick={ () => setShowDetails(true) }

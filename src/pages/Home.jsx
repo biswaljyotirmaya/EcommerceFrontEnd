@@ -10,7 +10,7 @@ function Home() {
 
     useEffect(() => {
         if (loggedIn) {
-            axios.get('http://localhost:4041/UserManagemnt-api/allUser')
+            axios.get('http://localhost:4041/UserManagement-api/allUsers')
                 .then((response) => {
                     console.log(response.data);
                     setUsers(response.data);
@@ -39,13 +39,13 @@ function Home() {
                         { users
                             .filter(userItem => userItem.role === user.role)
                             .map(userItem => (
+
                                 <div key={ userItem.id } className="border p-2 mb-2 text-center">
                                     <h5>Name: { userItem.name }</h5>
                                     <p>Email:{ userItem.email }</p>
                                     <p>Role: { userItem.role }</p>
                                 </div>
                             )) }
-
                     </div>
                 </>
             ) : (

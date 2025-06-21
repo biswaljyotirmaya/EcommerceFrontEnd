@@ -1,36 +1,80 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import ProductCard from '../components/ProductCard';
+import axios from 'axios';
+import ProductRegister from '../productComponents/ProductRegister';
 
 function Product() {
-    // const { loggedIn } = useSelector((state) => state.auth);
+    const { loggedIn, user } = useSelector((state) => state.auth);
+    const [ products, setProducts ] = useState([]);
+    const [ error, setError ] = useState(null);
+    const [ showRegisterModal, setShowRegisterModal ] = useState(false);
 
-    const loggedIn = true;
+    const isAdmin = user?.role === 'ADMIN';
 
-    const products = [
-        { id: 1, name: 'Product A' },
-        { id: 2, name: 'Product B' },
-        { id: 3, name: 'Product C' },
-        { id: 4, name: 'Product D' },
-        { id: 5, name: 'Product E' },
-        { id: 6, name: 'Product F' },
-        { id: 7, name: 'Product G' },
-        { id: 8, name: 'Product H' },
-        { id: 9, name: 'Product I' },
-    ];
+    const fetchProducts = () => {
+        axios.get("http://localhost:4042/product-api/allProducts")
+            .then(response => {
+                setProducts(response.data);
+            })
+            .catch(err => {
+                console.error("Error fetching products:", err);
+                setError("Unable to load products. Please try again later.");
+            });
+    };
+
+    useEffect(() => {
+        if (loggedIn) {
+            fetchProducts();
+        }
+    }, [ loggedIn ]);
+
+    const handleRegisterSuccess = () => {
+        setShowRegisterModal(false);
+        fetchProducts();
+    };
+
+    if (!loggedIn) {
+        return (
+            <div className="text-center p-4 text-gray-500 font-semibold">
+                Login to view Products
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="text-center p-4 text-red-500 font-semibold">
+                { error }
+            </div>
+        );
+    }
 
     return (
-        <>
-            { loggedIn ? (
-                <div className="grid grid-cols-4 gap-3 p-4">
-                    { products.map(product => (
-                        <ProductCard key={ product.id } product={ product } />
-                    )) }
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+            { products.map((product) => (
+                <ProductCard key={ product.id } product={ product } />
+            )) }
+
+            { isAdmin && (
+                <div
+                    className="border-2 border-dashed border-gray-400 flex items-center justify-center p-6 rounded-lg hover:border-blue-500 cursor-pointer transition"
+                    onClick={ () => setShowRegisterModal(true) }
+                >
+                    <div className="text-center text-gray-600">
+                        <p className="text-3xl font-bold">+</p>
+                        <p>Add Product</p>
+                    </div>
                 </div>
-            ) : (
-                <div>Login to view Product</div>
             ) }
-        </>
+
+            { showRegisterModal && (
+                <ProductRegister
+                    onClose={ () => setShowRegisterModal(false) }
+                    onSuccess={ handleRegisterSuccess }
+                />
+            ) }
+        </div>
     );
 }
 
