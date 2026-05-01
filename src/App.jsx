@@ -11,7 +11,7 @@ import VendorItemDetails from "./components/orders/VendorItemDetails";
 
 export default function App() {
   return (
-    <>
+    <div className="min-h-screen">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -26,6 +26,6 @@ export default function App() {
           element={<VendorItemDetails />}
         />
       </Routes>
-    </>
+    </div>
   );
 }

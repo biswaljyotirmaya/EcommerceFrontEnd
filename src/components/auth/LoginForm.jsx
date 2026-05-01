@@ -76,16 +76,19 @@ export default function LoginForm({ open, onClose, openRegister }) {
   return (
     <>
       <Dialog open={open} onClose={onClose} className="relative z-50">
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" />
+        <div className="fixed inset-0 bg-slate-950/55 backdrop-blur-sm" />
 
         <div className="fixed inset-0 flex items-center justify-center px-4">
-          <Dialog.Panel className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+          <Dialog.Panel className="glass-panel w-full max-w-md rounded-3xl p-6">
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
               <Dialog.Title className="text-lg font-semibold">
                 Login
               </Dialog.Title>
-              <button onClick={onClose}>
+              <button
+                onClick={onClose}
+                className="grid h-9 w-9 place-items-center rounded-full hover:bg-slate-100"
+              >
                 <X size={18} />
               </button>
             </div>
@@ -124,7 +127,7 @@ export default function LoginForm({ open, onClose, openRegister }) {
                 <button
                   type="button"
                   onClick={() => setOpenForgot(true)}
-                  className="text-blue-600 hover:underline"
+                  className="font-semibold text-teal-700 hover:underline"
                 >
                   Forgot password?
                 </button>
@@ -135,7 +138,7 @@ export default function LoginForm({ open, onClose, openRegister }) {
                     onClose();
                     openRegister();
                   }}
-                  className="text-blue-600 hover:underline"
+                  className="font-semibold text-teal-700 hover:underline"
                 >
                   Create account
                 </button>
@@ -144,7 +147,7 @@ export default function LoginForm({ open, onClose, openRegister }) {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-xl bg-blue-600 py-2 text-white font-medium hover:bg-blue-700 disabled:opacity-50"
+                className="primary-btn w-full py-3 disabled:opacity-50"
               >
                 {loading ? "Logging in..." : "Login"}
               </button>
@@ -172,7 +175,7 @@ function Input({ label, icon: Icon, ...props }) {
         />
         <input
           {...props}
-          className="w-full rounded-xl border border-gray-300 pl-10 pr-3 py-2 focus:ring-2 focus:ring-blue-500"
+          className="field-control pl-10 pr-3 py-3"
         />
       </div>
     </div>

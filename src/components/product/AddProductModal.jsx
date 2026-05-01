@@ -78,23 +78,23 @@ export default function AddProductModal({ open, onClose, onSuccess }) {
 
   return (
     <Dialog open={open} onClose={handleClose} className="relative z-50">
-      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" />
+      <div className="fixed inset-0 bg-slate-950/55 backdrop-blur-sm" />
       <div className="fixed inset-0 flex items-center justify-center p-6">
-        <Dialog.Panel className="relative w-full max-w-6xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-slideIn">
+        <Dialog.Panel className="glass-panel relative w-full max-w-6xl overflow-hidden rounded-3xl animate-slideIn">
           <button
             onClick={handleClose}
-            className="absolute top-4 right-4 text-gray-500 hover:text-black"
+            className="absolute right-4 top-4 z-10 grid h-10 w-10 place-items-center rounded-full bg-white/80 text-slate-500 hover:text-slate-950"
           >
             <X size={26} />
           </button>
 
           <div className="grid grid-cols-1 md:grid-cols-2">
-            <div className="bg-gray-50 p-6 flex flex-col">
-              <h2 className="text-lg font-semibold mb-4">Product Preview</h2>
+            <div className="flex flex-col bg-slate-950 p-6 text-white">
+              <h2 className="mb-4 text-lg font-black">Product Preview</h2>
 
-              <div className="flex-1 flex items-center justify-center rounded-xl bg-white border overflow-hidden">
+              <div className="flex flex-1 items-center justify-center overflow-hidden rounded-3xl border border-white/10 bg-white/10">
                 {!form.image || previewError ? (
-                  <div className="flex flex-col items-center text-gray-400">
+                  <div className="flex flex-col items-center text-white/60">
                     <ImageOff size={48} />
                     <p className="mt-2 text-sm">Image preview unavailable</p>
                   </div>
@@ -108,13 +108,15 @@ export default function AddProductModal({ open, onClose, onSuccess }) {
                 )}
               </div>
 
-              <p className="mt-4 text-sm text-gray-500 text-center">
+              <p className="mt-4 text-center text-sm text-white/60">
                 Paste an image URL to preview the product
               </p>
             </div>
 
             <div className="p-6">
-              <h1 className="text-2xl font-semibold mb-6">Add New Product</h1>
+              <h1 className="mb-6 text-2xl font-black text-slate-950">
+                Add New Product
+              </h1>
 
               <ProductForm
                 form={form}
@@ -126,7 +128,7 @@ export default function AddProductModal({ open, onClose, onSuccess }) {
               <div className="flex justify-end gap-3 mt-6">
                 <button
                   onClick={handleClose}
-                  className="px-4 py-2 border rounded-xl"
+                  className="secondary-btn px-4 py-2"
                 >
                   Cancel
                 </button>
@@ -134,7 +136,7 @@ export default function AddProductModal({ open, onClose, onSuccess }) {
                 <button
                   disabled={loading}
                   onClick={handleSubmit}
-                  className="px-6 py-2 bg-green-600 text-white rounded-xl font-medium hover:bg-green-700 disabled:opacity-50"
+                  className="primary-btn px-6 py-2 disabled:opacity-50"
                 >
                   {loading ? "Saving..." : "Add Product"}
                 </button>

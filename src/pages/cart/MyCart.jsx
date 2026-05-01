@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Minus, Plus, ShieldCheck, ShoppingBag, Trash2 } from "lucide-react";
 
 import {
   getCart,
@@ -51,6 +52,9 @@ export default function MyCart() {
     [items],
   );
 
+  const discountAmount = grossTotal * discount;
+  const payableTotal = grossTotal - discountAmount;
+
   const changeQty = async (item, delta) => {
     const newQty = item.qunt + delta;
 
@@ -100,28 +104,45 @@ export default function MyCart() {
   };
 
   useEffect(() => {
-    if (grossTotal > 30000 && grossTotal <= 30000) {
-      setDiscount(0.1);
-    } else if (grossTotal > 30000 && grossTotal <= 50000) {
-      setDiscount(0.2);
-    } else if (grossTotal > 50000) {
+    if (grossTotal > 50000) {
       setDiscount(0.3);
+    } else if (grossTotal > 30000) {
+      setDiscount(0.2);
+    } else if (grossTotal > 15000) {
+      setDiscount(0.1);
     } else {
-      setDiscount(1);
+      setDiscount(0);
     }
-  }, [items, grossTotal]);
+  }, [grossTotal]);
+
   return (
-    <div className="max-w-7xl mx-auto px-6 py-8">
-      <h1 className="text-3xl font-semibold mb-6">My Cart</h1>
+    <div className="page-shell space-y-8">
+      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+        <div>
+          <p className="text-sm font-bold uppercase tracking-wider text-teal-700">
+            Checkout
+          </p>
+          <h1 className="text-4xl font-black text-slate-950">My Cart</h1>
+        </div>
+        <p className="text-sm font-semibold text-slate-500">
+          Cart ID: {cart?.id || "Loading"}
+        </p>
+      </div>
 
       {items.length === 0 && (
-        <div className="rounded-xl bg-white p-10 text-center shadow">
-          <p className="text-gray-500 text-lg">Your cart is empty 🛒</p>
+        <div className="glass-panel rounded-3xl p-12 text-center">
+          <ShoppingBag className="mx-auto text-teal-600" size={44} />
+          <p className="mt-4 text-lg font-bold text-slate-700">
+            Your cart is empty
+          </p>
+          <p className="mt-1 text-slate-500">
+            Add products from the marketplace to build your order.
+          </p>
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-4">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="space-y-4 lg:col-span-2">
           {items.map((item) => (
             <CartItemRow
               key={item.id}
@@ -134,41 +155,45 @@ export default function MyCart() {
         </div>
 
         {items.length > 0 && (
-          <div className="rounded-2xl bg-white shadow p-6 h-fit sticky top-24">
-            <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
-
-            <div className="flex justify-between text-sm mb-2">
-              <span>Items</span>
-              <span>{items.length}</span>
+          <aside className="glass-panel h-fit rounded-3xl p-6 lg:sticky lg:top-24">
+            <div className="flex items-center gap-3">
+              <div className="grid h-12 w-12 place-items-center rounded-2xl bg-slate-950 text-white">
+                <ShieldCheck size={22} />
+              </div>
+              <div>
+                <h2 className="text-xl font-black text-slate-950">
+                  Order Summary
+                </h2>
+                <p className="text-sm text-slate-500">Secure OTP checkout</p>
+              </div>
             </div>
 
-            <div className="flex justify-between text-lg font-semibold border-t pt-4">
-              <div>
-                {discount === 0.1 ? (
-                  <span>You got discount of 10%</span>
-                ) : discount === 0.2 ? (
-                  <span>You got discount of 20%</span>
-                ) : discount === 0.3 ? (
-                  <span>You got discount of 30%</span>
-                ) : (
-                  <span>You dont have a discount</span>
-                )}
+            <div className="mt-6 space-y-4 rounded-2xl bg-white/75 p-4">
+              <SummaryRow label="Items" value={items.length} />
+              <SummaryRow label="Subtotal" value={`Rs. ${grossTotal.toFixed(2)}`} />
+              <SummaryRow
+                label={discount > 0 ? `Discount (${discount * 100}%)` : "Discount"}
+                value={`- Rs. ${discountAmount.toFixed(2)}`}
+              />
+              <div className="border-t border-slate-200 pt-4">
+                <SummaryRow
+                  label="Payable total"
+                  value={`Rs. ${payableTotal.toFixed(2)}`}
+                  strong
+                />
               </div>
-              <span>Total</span>
-              <span className="text-green-600">
-                ₹ {(grossTotal - grossTotal * discount).toFixed(2)}
-              </span>
             </div>
 
             <button
               onClick={handleConfirmOrder}
-              className="mt-6 w-full rounded-xl bg-blue-600 py-3 text-white font-medium hover:bg-blue-700"
+              className="primary-btn mt-6 w-full px-5 py-3"
             >
               Confirm Order
             </button>
-          </div>
+          </aside>
         )}
       </div>
+
       <ConfirmModal
         open={!!confirm}
         title="Remove item?"
@@ -198,40 +223,57 @@ export default function MyCart() {
 
 function CartItemRow({ item, onInc, onDec, onPreview }) {
   return (
-    <div className="flex items-center gap-4 rounded-2xl bg-white p-4 shadow hover:shadow-md transition">
+    <div className="soft-card flex flex-col gap-4 rounded-3xl p-4 transition hover:-translate-y-0.5 hover:shadow-xl sm:flex-row sm:items-center">
       <img
         src={item.image || noImage}
         alt={item.name}
         onClick={onPreview}
-        className="h-24 w-24 rounded-xl object-cover cursor-pointer"
+        className="h-36 w-full cursor-pointer rounded-2xl object-cover sm:h-28 sm:w-28"
       />
 
-      <div className="flex-1">
-        <p className="font-medium">{item.name}</p>
-        <p className="text-sm text-gray-500">₹ {item.price}</p>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-lg font-black text-slate-950">{item.name}</p>
+        <p className="text-sm font-semibold text-slate-500">Rs. {item.price}</p>
       </div>
 
-      <div className="flex items-center gap-3">
-        <button
-          onClick={onDec}
-          className="h-8 w-8 rounded-full bg-gray-100 hover:bg-gray-200"
-        >
-          −
-        </button>
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2 rounded-2xl bg-slate-100 p-1">
+          <button
+            onClick={onDec}
+            className="grid h-9 w-9 place-items-center rounded-xl bg-white text-slate-700 shadow-sm hover:text-rose-600"
+          >
+            {item.qunt <= 1 ? <Trash2 size={16} /> : <Minus size={16} />}
+          </button>
 
-        <span className="min-w-6 text-center font-medium">{item.qunt}</span>
+          <span className="min-w-8 text-center font-black text-slate-950">
+            {item.qunt}
+          </span>
 
-        <button
-          onClick={onInc}
-          className="h-8 w-8 rounded-full bg-gray-100 hover:bg-gray-200"
-        >
-          +
-        </button>
+          <button
+            onClick={onInc}
+            className="grid h-9 w-9 place-items-center rounded-xl bg-white text-slate-700 shadow-sm hover:text-teal-700"
+          >
+            <Plus size={16} />
+          </button>
+        </div>
+
+        <p className="min-w-28 text-right text-lg font-black text-slate-950">
+          Rs. {(item.price * item.qunt).toFixed(2)}
+        </p>
       </div>
+    </div>
+  );
+}
 
-      <p className="w-24 text-right font-semibold">
-        ₹ {(item.price * item.qunt).toFixed(2)}
-      </p>
+function SummaryRow({ label, value, strong = false }) {
+  return (
+    <div
+      className={`flex items-center justify-between gap-4 ${
+        strong ? "text-lg font-black text-slate-950" : "text-sm text-slate-600"
+      }`}
+    >
+      <span>{label}</span>
+      <span className={strong ? "" : "font-bold text-slate-800"}>{value}</span>
     </div>
   );
 }

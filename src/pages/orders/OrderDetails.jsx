@@ -41,9 +41,16 @@ export default function OrderDetails() {
   if (!order) return null;
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-8 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold">Order #{order.orderId}</h1>
+    <div className="page-shell space-y-6">
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        <div>
+          <p className="text-sm font-bold uppercase tracking-wider text-teal-700">
+            Order details
+          </p>
+          <h1 className="text-4xl font-black text-slate-950">
+            Order #{order.orderId}
+          </h1>
+        </div>
 
         <OrderStatusBadge status={order.orderStatus} />
       </div>
@@ -63,13 +70,15 @@ export default function OrderDetails() {
         ))}
       </div>
 
-      <div className="flex justify-between items-center bg-white p-5 rounded-xl shadow">
-        <p className="text-lg font-semibold">Total: ₹ {total.toFixed(2)}</p>
+      <div className="glass-panel flex flex-col justify-between gap-4 rounded-3xl p-5 sm:flex-row sm:items-center">
+        <p className="text-xl font-black text-slate-950">
+          Total: Rs. {total.toFixed(2)}
+        </p>
 
         {order.orderStatus === "CREATED" && (
           <button
             onClick={() => setConfirmCancel(true)}
-            className="text-red-600 hover:underline"
+            className="font-bold text-rose-600 hover:underline"
           >
             Cancel Order
           </button>

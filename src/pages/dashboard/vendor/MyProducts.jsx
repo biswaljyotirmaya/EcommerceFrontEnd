@@ -4,6 +4,7 @@ import { getMyProducts } from "../../../api/productApi";
 import ProductCard from "../../../components/product/ProductCard";
 import AddProductModal from "../../../components/product/AddProductModal";
 import useToast from "../../../components/toast/useToast";
+import { Plus } from "lucide-react";
 
 export default function MyProducts() {
   const toast = useToast();
@@ -28,23 +29,31 @@ export default function MyProducts() {
   }, [loading, isAuthenticated, user?.role]);
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-xl font-semibold">My Products</h1>
+    <div className="page-shell space-y-6">
+      <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+        <div>
+          <p className="text-sm font-bold uppercase tracking-wider text-teal-700">
+            Inventory
+          </p>
+          <h1 className="text-4xl font-black text-slate-950">My Products</h1>
+        </div>
 
         <button
           onClick={() => setOpenAdd(true)}
-          className="bg-green-600 text-white px-4 py-2 rounded-xl"
+          className="primary-btn px-5 py-3"
         >
-          + Add Product
+          <Plus size={18} />
+          Add Product
         </button>
       </div>
 
       {products.length === 0 && (
-        <p className="text-gray-500">No products yet</p>
+        <div className="glass-panel rounded-3xl p-10 text-center text-slate-500">
+          No products yet
+        </div>
       )}
 
-      <div className="space-y-4">
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         {products.map((p) => (
           <ProductCard
             key={p.id}

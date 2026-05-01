@@ -7,6 +7,7 @@ import RegisterForm from "../auth/RegisterForm";
 import ProfileMenu from "./ProfileMenu";
 import { signOut } from "firebase/auth";
 import { auth } from "../../config/firebse";
+import { LayoutDashboard, Package, ShoppingBag, ShoppingCart, Store } from "lucide-react";
 
 export default function Navbar() {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
@@ -28,42 +29,45 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="sticky top-0 z-40 bg-white/80 backdrop-blur border-b">
-        <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold tracking-tight">
-            E<span className="text-blue-600">Com</span>
+      <nav className="sticky top-0 z-40 border-b border-white/70 bg-white/78 backdrop-blur-xl shadow-sm shadow-slate-200/60">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+          <Link to="/" className="flex items-center gap-2 text-xl font-black tracking-tight text-slate-950">
+            <span className="grid h-10 w-10 place-items-center rounded-2xl bg-slate-950 text-white shadow-lg shadow-slate-400/30">
+              <Store size={20} />
+            </span>
+            Market<span className="text-teal-600">Hub</span>
           </Link>
 
-          <div className="hidden md:flex items-center gap-6 text-sm font-medium">
-            <Link to="/" className="hover:text-blue-600">
+          <div className="hidden items-center gap-1 rounded-2xl border border-slate-200/80 bg-white/70 p-1 text-sm font-semibold text-slate-600 md:flex">
+            <NavLink to="/" icon={ShoppingBag}>
               Home
-            </Link>
+            </NavLink>
 
             {isAuthenticated && (
-              <Link to="/dashboard" className="hover:text-blue-600">
+              <NavLink to="/dashboard" icon={LayoutDashboard}>
                 Dashboard
-              </Link>
+              </NavLink>
             )}
 
             {isAuthenticated && user.role === "VENDOR" && (
               <>
-                <Link to="/vendor/products" className="hover:text-blue-600">
+                <NavLink to="/vendor/products" icon={Package}>
                   Products
-                </Link>
-                <Link to="/vendor/orders" className="hover:text-blue-600">
+                </NavLink>
+                <NavLink to="/vendor/orders" icon={ShoppingCart}>
                   Orders
-                </Link>
+                </NavLink>
               </>
             )}
 
             {isAuthenticated && user.role === "CONSUMER" && (
               <>
-                <Link to="/cart" className="hover:text-blue-600">
+                <NavLink to="/cart" icon={ShoppingCart}>
                   Cart
-                </Link>
-                <Link to="/orders" className="hover:text-blue-600">
+                </NavLink>
+                <NavLink to="/orders" icon={Package}>
                   Orders
-                </Link>
+                </NavLink>
               </>
             )}
           </div>
@@ -73,14 +77,14 @@ export default function Navbar() {
               <>
                 <button
                   onClick={() => setOpenLogin(true)}
-                  className="px-4 py-1.5 rounded-lg text-sm border hover:bg-gray-100"
+                  className="secondary-btn px-4 py-2 text-sm"
                 >
                   Login
                 </button>
 
                 <button
                   onClick={() => setOpenRegister(true)}
-                  className="px-4 py-1.5 rounded-lg text-sm bg-blue-600 text-white hover:bg-blue-700"
+                  className="primary-btn px-4 py-2 text-sm"
                 >
                   Register
                 </button>
@@ -106,5 +110,17 @@ export default function Navbar() {
         onClose={() => setOpenRegister(false)}
       />
     </>
+  );
+}
+
+function NavLink({ to, icon: Icon, children }) {
+  return (
+    <Link
+      to={to}
+      className="inline-flex items-center gap-2 rounded-xl px-3 py-2 hover:bg-slate-950 hover:text-white"
+    >
+      <Icon size={16} />
+      {children}
+    </Link>
   );
 }

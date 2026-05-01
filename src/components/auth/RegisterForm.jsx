@@ -90,15 +90,18 @@ export default function RegisterForm({ open, onClose, prefill = {} }) {
 
   return (
     <Dialog open={open} onClose={onClose} className="relative z-50">
-      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" />
+      <div className="fixed inset-0 bg-slate-950/55 backdrop-blur-sm" />
 
       <div className="fixed inset-0 flex items-center justify-center px-4">
-        <Dialog.Panel className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl animate-slideIn">
+        <Dialog.Panel className="glass-panel w-full max-w-md rounded-3xl p-6 animate-slideIn">
           <div className="flex items-center justify-between mb-4">
             <Dialog.Title className="text-lg font-semibold">
               Create Account
             </Dialog.Title>
-            <button onClick={onClose}>
+            <button
+              onClick={onClose}
+              className="grid h-9 w-9 place-items-center rounded-full hover:bg-slate-100"
+            >
               <X size={18} />
             </button>
           </div>
@@ -168,7 +171,7 @@ export default function RegisterForm({ open, onClose, prefill = {} }) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-blue-600 py-2 text-white font-medium hover:bg-blue-700 disabled:opacity-50"
+              className="primary-btn w-full py-3 disabled:opacity-50"
             >
               {loading ? "Creating account..." : "Register"}
             </button>
@@ -185,7 +188,7 @@ function RoleButton({ active, onClick, label, icon: Icon }) {
       type="button"
       onClick={onClick}
       className={`flex-1 rounded-xl border px-3 py-2 text-sm font-medium transition
-        ${active ? "bg-blue-600 text-white" : "bg-white text-gray-700 hover:bg-gray-100"}
+        ${active ? "bg-slate-950 text-white" : "bg-white text-gray-700 hover:bg-gray-100"}
       `}
     >
       {Icon && <Icon size={16} className="inline mr-1" />}
@@ -205,7 +208,7 @@ function Input({ label, icon: Icon, ...props }) {
         />
         <input
           {...props}
-          className="w-full rounded-xl border pl-10 pr-3 py-2 focus:ring-2 focus:ring-blue-500"
+          className="field-control pl-10 pr-3 py-3"
         />
       </div>
     </div>
